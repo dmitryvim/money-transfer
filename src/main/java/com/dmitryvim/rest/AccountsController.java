@@ -18,10 +18,10 @@ public class AccountsController {
         this.accountsService = accountsService;
     }
 
-    public void startServer() {
-        port(8080);
+    public void startServer(int port) {
+        port(port);
         post("/accounts", this::createAccount);
-        post("/accounts/:id/add-money", this::putMoney);
+        post("/accounts/:id/put-money", this::putMoney);
         post("/accounts/:id/take-money", this::takeMoney);
         post("/transfer", this::transferMoney);
         get("/accounts/:id", this::account);

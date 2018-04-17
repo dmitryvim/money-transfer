@@ -6,7 +6,7 @@ Design and implement a RESTful API (including data model and the backing impleme
 2. use whatever frameworks/libraries you like (except Spring, sorry!) but don't forget about the requirement #1 
 3. the datastore should run in-memory for the sake of this test 
 4. the final result should be executable as a standalone program (should not require a pre-installed container/server) 
-5. - demonstrate with tests that the API works as expected 
+5. demonstrate with tests that the API works as expected 
 
 ## Implicit requirements: 
 

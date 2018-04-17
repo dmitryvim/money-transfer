@@ -1,7 +1,7 @@
 package com.dmitryvim.rest;
 
 
-import com.dmitryvim.application.MoneyTransferService;
+import com.dmitryvim.application.AccountsService;
 import spark.Request;
 import spark.Response;
 
@@ -12,10 +12,10 @@ import static spark.Spark.*;
  */
 public class AccountsController {
 
-    private final MoneyTransferService moneyTransferService;
+    private final AccountsService accountsService;
 
-    public AccountsController(MoneyTransferService moneyTransferService) {
-        this.moneyTransferService = moneyTransferService;
+    public AccountsController(AccountsService accountsService) {
+        this.accountsService = accountsService;
     }
 
     public void startServer() {
@@ -33,7 +33,7 @@ public class AccountsController {
 
     private String account(Request request, Response response) {
         int id = accountId(request);
-        int money = this.moneyTransferService.moneyAtAccount(id);
+        int money = this.accountsService.moneyAtAccount(id);
         return String.valueOf(money);
     }
 
@@ -42,14 +42,14 @@ public class AccountsController {
     }
 
     private String createAccount(Request request, Response response) {
-        int id = this.moneyTransferService.createAccount();
+        int id = this.accountsService.createAccount();
         return String.valueOf(id);
     }
 
     private String putMoney(Request request, Response response) {
         int id = accountId(request);
         int amount = intQueryParam(request, "amount");
-        this.moneyTransferService.putMoneyToAccount(id, amount);
+        this.accountsService.putMoneyToAccount(id, amount);
         return "Success";
     }
 
@@ -60,7 +60,7 @@ public class AccountsController {
     private String takeMoney(Request request, Response response) {
         int id = accountId(request);
         int amount = intQueryParam(request, "amount");
-        this.moneyTransferService.takeMoneyFromAccount(id, amount);
+        this.accountsService.takeMoneyFromAccount(id, amount);
         return "Success";
     }
 
@@ -68,7 +68,7 @@ public class AccountsController {
         int fromId = intQueryParam(request, "from");
         int toId = intQueryParam(request, "to");
         int amount = intQueryParam(request, "amount");
-        this.moneyTransferService.transferMoney(fromId, toId, amount);
+        this.accountsService.transferMoney(fromId, toId, amount);
         return "transfer money";
     }
 }

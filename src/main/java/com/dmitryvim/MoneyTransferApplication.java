@@ -1,6 +1,6 @@
 package com.dmitryvim;
 
-import com.dmitryvim.application.MoneyTransferService;
+import com.dmitryvim.application.AccountsService;
 import com.dmitryvim.rest.AccountsController;
 
 /**
@@ -9,8 +9,8 @@ import com.dmitryvim.rest.AccountsController;
 public class MoneyTransferApplication {
 
     public static void main(String[] args) {
-        MoneyTransferService moneyTransferService = new MoneyTransferService();
-        AccountsController accountsController = new AccountsController(moneyTransferService);
+        AccountsService accountsService = new AccountsService();
+        AccountsController accountsController = new AccountsController(accountsService);
         accountsController.startServer();
     }
 }

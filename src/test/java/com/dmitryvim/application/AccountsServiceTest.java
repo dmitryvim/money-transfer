@@ -7,12 +7,12 @@ import static org.junit.Assert.assertEquals;
 /**
  * @author dmitry.mikhailovich@gmail.com
  */
-public class MoneyTransferServiceTest {
+public class AccountsServiceTest {
 
     @Test
     public void shouldCreateAccount() {
         // given
-        MoneyTransferService service = new MoneyTransferService();
+        AccountsService service = new AccountsService();
 
         // when
         int firstId = service.createAccount();
@@ -27,7 +27,7 @@ public class MoneyTransferServiceTest {
     public void shouldPutMoneyToAccount() {
 
         // given
-        MoneyTransferService service = new MoneyTransferService();
+        AccountsService service = new AccountsService();
         int id = service.createAccount();
         int amount = 10;
 
@@ -41,7 +41,7 @@ public class MoneyTransferServiceTest {
     @Test
     public void shouldTakeMoneyFromAccount() {
         // given
-        MoneyTransferService service = new MoneyTransferService();
+        AccountsService service = new AccountsService();
         int id = service.createAccount();
         int putAmount = 10;
         service.putMoneyToAccount(id, putAmount);
@@ -57,7 +57,7 @@ public class MoneyTransferServiceTest {
     @Test
     public void shouldTransferMoney() {
         // given
-        MoneyTransferService service = new MoneyTransferService();
+        AccountsService service = new AccountsService();
         int firstId = service.createAccount();
         int secondId = service.createAccount();
         int firstAmount = 10;
@@ -75,7 +75,7 @@ public class MoneyTransferServiceTest {
     @Test(expected = AccountNotFoundException.class)
     public void shouldThrowExceptionOnNotFoundAccount() {
         // given
-        MoneyTransferService service = new MoneyTransferService();
+        AccountsService service = new AccountsService();
 
         // expect
         service.moneyAtAccount(42);

@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * @author dmitry.mikhailovich@gmail.com
  */
-public class MoneyTransferService {
+public class AccountsService {
 
     private final List<Account> accounts = new ArrayList<>();
 

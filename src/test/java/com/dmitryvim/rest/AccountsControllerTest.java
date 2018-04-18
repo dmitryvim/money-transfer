@@ -3,8 +3,8 @@ package com.dmitryvim.rest;
 import com.dmitryvim.application.AccountsService;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
-import org.junit.After;
-import org.junit.Before;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -18,38 +18,95 @@ import static org.junit.Assert.assertEquals;
  */
 public class AccountsControllerTest {
 
-    private int port = findAvailablePort();
+    private static int port;
 
-    private AccountsService service;
+    private static AccountsService accountsService;
 
-    private AccountsController controller;
+    private static AccountsController controller;
 
-    @Before
-    public void startService() {
-        this.service = Mockito.mock(AccountsService.class);
-        this.controller = new AccountsController(this.service);
-        this.controller.startServer(this.port);
+    @BeforeClass
+    public static void startService() {
+        port = findAvailablePort();
+        accountsService = Mockito.mock(AccountsService.class);
+        controller = new AccountsController(accountsService);
+        controller.startServer(port);
+    }
+
+    @AfterClass
+    public static void stopService() {
+        controller.stopServer();
     }
 
     @Test
-    public void checkResource() throws Exception {
+    public void checkCreateAccountResource() throws Exception {
         // when
         HttpResponse<String> response = Unirest.post(url("accounts")).asString();
 
         // then
         assertEquals(200, response.getStatus());
-        Mockito.verify(this.service).createAccount();
+        Mockito.verify(accountsService).createAccount();
     }
 
-    //TODO написать простые тесты для других endpoints
+    @Test
+    public void checkReceiveAccountResource() throws Exception {
+        // given
+        int id = 12;
+        int money = 100;
+        Mockito.when(accountsService.moneyAtAccount(id)).thenReturn(money);
 
-    @After
-    public void stopService() {
-        this.controller.stopServer();
+        // when
+        HttpResponse<String> response = Unirest.get(url("accounts/" + id)).asString();
+
+        // then
+        assertEquals(200, response.getStatus());
+        assertEquals(String.valueOf(money), response.getBody());
+    }
+
+    @Test
+    public void checkPutMoneyResource() throws Exception {
+        // given
+        int id = 12;
+        int amount = 100;
+
+        // when
+        HttpResponse<String> response = Unirest.post(url("accounts/" + id + "/put-money?amount=" + amount)).asString();
+
+        //then
+        assertEquals(200, response.getStatus());
+        Mockito.verify(accountsService).putMoneyToAccount(id, amount);
+    }
+
+    @Test
+    public void checkTakeMoneyResource() throws Exception {
+        // given
+        int id = 12;
+        int amount = 100;
+
+        // when
+        HttpResponse<String> response = Unirest.post(url("accounts/" + id + "/take-money?amount=" + amount)).asString();
+
+        //then
+        assertEquals(200, response.getStatus());
+        Mockito.verify(accountsService).takeMoneyFromAccount(id, amount);
+    }
+
+    @Test
+    public void checkTransferMoneyResource() throws Exception {
+        // given
+        int from = 12;
+        int to = 10;
+        int amount = 100;
+
+        // when
+        HttpResponse<String> response = Unirest.post(url("transfer?from=" + from + "&to=" + to + "&amount=" + amount)).asString();
+
+        //then
+        assertEquals(200, response.getStatus());
+        Mockito.verify(accountsService).transferMoney(from, to, amount);
     }
 
     private String url(String path) {
-        return "http://localhost:" + this.port + "/" + path;
+        return "http://localhost:" + port + "/" + path;
     }
 
     private static int findAvailablePort() {

@@ -1,5 +1,6 @@
 package com.mikhaylovich.application;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -9,14 +10,18 @@ import static org.junit.Assert.assertEquals;
  */
 public class AccountsServiceTest {
 
+    private AccountsService service;
+
+    @Before
+    public void initService() {
+        this.service = new AccountsService();
+    }
+    
     @Test
     public void shouldCreateAccount() {
-        // given
-        AccountsService service = new AccountsService();
-
         // when
-        int firstId = service.createAccount();
-        int secondId = service.createAccount();
+        int firstId = this.service.createAccount();
+        int secondId = this.service.createAccount();
 
         // then
         assertEquals(0, firstId);
@@ -25,30 +30,27 @@ public class AccountsServiceTest {
 
     @Test
     public void shouldPutMoneyToAccount() {
-
         // given
-        AccountsService service = new AccountsService();
-        int id = service.createAccount();
+        int id = this.service.createAccount();
         int amount = 10;
 
         // when
-        service.putMoneyToAccount(id, amount);
+        this.service.putMoneyToAccount(id, amount);
 
         // then
-        assertEquals(amount, service.moneyAtAccount(id));
+        assertEquals(amount, this.service.moneyAtAccount(id));
     }
 
     @Test
     public void shouldTakeMoneyFromAccount() {
         // given
-        AccountsService service = new AccountsService();
-        int id = service.createAccount();
+        int id = this.service.createAccount();
         int putAmount = 10;
-        service.putMoneyToAccount(id, putAmount);
+        this.service.putMoneyToAccount(id, putAmount);
         int takeAmount = 5;
 
         // when
-        service.takeMoneyFromAccount(id, takeAmount);
+        this.service.takeMoneyFromAccount(id, takeAmount);
 
         // then
         assertEquals(putAmount - takeAmount, service.moneyAtAccount(id));
@@ -57,15 +59,14 @@ public class AccountsServiceTest {
     @Test
     public void shouldTransferMoney() {
         // given
-        AccountsService service = new AccountsService();
-        int firstId = service.createAccount();
-        int secondId = service.createAccount();
+        int firstId = this.service.createAccount();
+        int secondId = this.service.createAccount();
         int firstAmount = 10;
         int transferAmount = 4;
-        service.putMoneyToAccount(firstId, firstAmount);
+        this.service.putMoneyToAccount(firstId, firstAmount);
 
         // when
-        service.transferMoney(firstId, secondId, transferAmount);
+        this.service.transferMoney(firstId, secondId, transferAmount);
 
         // then
         assertEquals(firstAmount - transferAmount, service.moneyAtAccount(firstId));
@@ -74,10 +75,6 @@ public class AccountsServiceTest {
 
     @Test(expected = AccountNotFoundException.class)
     public void shouldThrowExceptionOnNotFoundAccount() {
-        // given
-        AccountsService service = new AccountsService();
-
-        // expect
-        service.moneyAtAccount(42);
+        this.service.moneyAtAccount(42012);
     }
 }

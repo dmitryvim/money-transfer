@@ -21,7 +21,6 @@ public class AccountsController {
     }
 
     public void startServer(int port) {
-        //TODO catch exceptions
         port(port);
         post("/accounts", this::createAccount);
         post("/accounts/:id/put-money", this::putMoney);

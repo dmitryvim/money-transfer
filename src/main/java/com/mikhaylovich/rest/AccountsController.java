@@ -39,6 +39,10 @@ public class AccountsController {
             response.status(400);
             response.body(exception.getMessage());
         });
+        exception(IllegalArgumentException.class, (exception, request, response) -> {
+            response.status(400);
+            response.body(exception.getMessage());
+        });
     }
 
     public void stopServer() {

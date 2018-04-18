@@ -11,6 +11,8 @@ public class MoneyTransferApplication {
     public static void main(String[] args) {
         AccountsService accountsService = new AccountsService();
         AccountsController accountsController = new AccountsController(accountsService);
+        //TODO use logger
+        //TODO add readme, how to test app
         accountsController.startServer(8080);
     }
 }

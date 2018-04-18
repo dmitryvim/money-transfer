@@ -83,6 +83,6 @@ public class AccountsController {
         int toId = intQueryParam(request, "to");
         int amount = intQueryParam(request, "amount");
         this.accountsService.transferMoney(fromId, toId, amount);
-        return "transfer money";
+        return "Money transfered";
     }
 }

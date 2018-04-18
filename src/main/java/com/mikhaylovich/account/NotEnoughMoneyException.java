@@ -5,6 +5,6 @@ package com.mikhaylovich.account;
  */
 public class NotEnoughMoneyException extends RuntimeException {
     NotEnoughMoneyException(Account account) {
-        super("There is no enough money on account " + account.getId());
+        super("Account " + account.getId() + " has not enough money.");
     }
 }

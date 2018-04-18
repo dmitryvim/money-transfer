@@ -1,6 +1,8 @@
 package com.mikhaylovich.rest;
 
 
+import com.mikhaylovich.account.NotEnoughMoneyException;
+import com.mikhaylovich.application.AccountNotFoundException;
 import com.mikhaylovich.application.AccountsService;
 import spark.Request;
 import spark.Response;
@@ -26,6 +28,18 @@ public class AccountsController {
         post("/accounts/:id/take-money", this::takeMoney);
         post("/transfer", this::transferMoney);
         get("/accounts/:id", this::account);
+
+        // common cases
+        notFound("Not found");
+        internalServerError("Internal server error");
+        exception(AccountNotFoundException.class, (exception, request, response) -> {
+            response.status(404);
+            response.body(exception.getMessage());
+        });
+        exception(NotEnoughMoneyException.class, (exception, request, response) -> {
+            response.status(400);
+            response.body(exception.getMessage());
+        });
     }
 
     public void stopServer() {

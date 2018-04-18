@@ -9,3 +9,10 @@
 .gradle/*
 build/*
 out/*
+
+# vs code
+.classpath
+.project
+.settings
+.classpath
+bin/*

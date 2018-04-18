@@ -3,6 +3,7 @@ package com.mikhaylovich.rest;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mikhaylovich.application.AccountsService;
+import org.eclipse.jetty.http.HttpStatus;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -43,7 +44,7 @@ public class AccountsControllerTest {
         HttpResponse<String> response = Unirest.post(url("accounts")).asString();
 
         // then
-        assertEquals(200, response.getStatus());
+        assertEquals(HttpStatus.OK_200, response.getStatus());
         Mockito.verify(accountsService).createAccount();
     }
 
@@ -58,7 +59,7 @@ public class AccountsControllerTest {
         HttpResponse<String> response = Unirest.get(url("accounts/" + id)).asString();
 
         // then
-        assertEquals(200, response.getStatus());
+        assertEquals(HttpStatus.OK_200, response.getStatus());
         assertEquals(String.valueOf(money), response.getBody());
     }
 
@@ -72,7 +73,7 @@ public class AccountsControllerTest {
         HttpResponse<String> response = Unirest.post(url("accounts/" + id + "/put-money?amount=" + amount)).asString();
 
         //then
-        assertEquals(200, response.getStatus());
+        assertEquals(HttpStatus.OK_200, response.getStatus());
         Mockito.verify(accountsService).putMoneyToAccount(id, amount);
     }
 
@@ -86,7 +87,7 @@ public class AccountsControllerTest {
         HttpResponse<String> response = Unirest.post(url("accounts/" + id + "/take-money?amount=" + amount)).asString();
 
         //then
-        assertEquals(200, response.getStatus());
+        assertEquals(HttpStatus.OK_200, response.getStatus());
         Mockito.verify(accountsService).takeMoneyFromAccount(id, amount);
     }
 
@@ -101,7 +102,7 @@ public class AccountsControllerTest {
         HttpResponse<String> response = Unirest.post(url("transfer?from=" + from + "&to=" + to + "&amount=" + amount)).asString();
 
         //then
-        assertEquals(200, response.getStatus());
+        assertEquals(HttpStatus.OK_200, response.getStatus());
         Mockito.verify(accountsService).transferMoney(from, to, amount);
     }
 

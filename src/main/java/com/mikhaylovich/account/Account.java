@@ -8,8 +8,8 @@ public class Account {
     private final int id;
 
     /*
-    In order to follow rule #1 (keep code as simple as possible)
-    I have ignored ideas of class Currency and Money to make code domain specific
+        In order to keep code simple I preferred to model money as just integer value.
+        In production way it's better to follow java overcomplicated objects and model enum Currency and class Money
      */
     private int money;
 

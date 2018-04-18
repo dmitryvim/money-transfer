@@ -59,8 +59,16 @@ public class AccountsService {
     }
 
     private void syncOnAccountsPair(Account left, Account right, Runnable runnable) {
-        Account first = left.getId() < right.getId() ? left : right;
-        Account second = left.getId() < right.getId() ? right : left;
+        Account first;
+        Account second;
+        if (left.getId() < right.getId()) {
+            first = left;
+            second = right;
+        } else {
+            first = right;
+            second = left;
+        }
+
         synchronized (first) {
             synchronized (second) {
                 runnable.run();

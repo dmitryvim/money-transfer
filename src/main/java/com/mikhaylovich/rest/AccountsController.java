@@ -4,6 +4,8 @@ package com.mikhaylovich.rest;
 import com.mikhaylovich.account.NotEnoughMoneyException;
 import com.mikhaylovich.application.AccountNotFoundException;
 import com.mikhaylovich.application.AccountsService;
+import org.eclipse.jetty.http.HttpStatus;
+import spark.ExceptionHandler;
 import spark.Request;
 import spark.Response;
 
@@ -20,39 +22,40 @@ public class AccountsController {
         this.accountsService = accountsService;
     }
 
-    public void startServer(int port) {
-        port(port);
-        post("/accounts", this::createAccount);
-        post("/accounts/:id/put-money", this::putMoney);
-        post("/accounts/:id/take-money", this::takeMoney);
-        post("/transfer", this::transferMoney);
-        get("/accounts/:id", this::account);
-
-        // common cases
-        notFound("Not found");
-        internalServerError("Internal server error");
-        exception(AccountNotFoundException.class, (exception, request, response) -> {
-            response.status(404);
+    private static <T extends Exception> ExceptionHandler<T> handleExceptionWithStatus(int statusCode) {
+        return (exception, request, response) -> {
+            response.status(statusCode);
             response.body(exception.getMessage());
-        });
-        exception(NotEnoughMoneyException.class, (exception, request, response) -> {
-            response.status(400);
-            response.body(exception.getMessage());
-        });
-        exception(IllegalArgumentException.class, (exception, request, response) -> {
-            response.status(400);
-            response.body(exception.getMessage());
-        });
+        };
     }
 
     public void stopServer() {
         stop();
     }
 
-    private String account(Request request, Response response) {
-        int id = accountId(request);
-        int money = this.accountsService.moneyAtAccount(id);
-        return String.valueOf(money);
+    /*
+        To keep code simple I skipped any json serializations and used query params and text answers.
+
+        In RESTful production way its better to model json objects for commands like put, take and transfer money.
+        Query params should be better used for filters and search queries.
+    */
+    public void startServer(int port) {
+        // configure port
+        port(port);
+
+        // business endpoints
+        post("/accounts", this::createAccount);
+        post("/accounts/:id/put-money", this::putMoney);
+        post("/accounts/:id/take-money", this::takeMoney);
+        post("/transfer", this::transferMoney);
+        get("/accounts/:id", this::account);
+
+        // exception handling
+        notFound("Not found");
+        internalServerError("Internal server error");
+        exception(AccountNotFoundException.class, handleExceptionWithStatus(HttpStatus.NOT_FOUND_404));
+        exception(NotEnoughMoneyException.class, handleExceptionWithStatus(HttpStatus.BAD_REQUEST_400));
+        exception(IllegalArgumentException.class, handleExceptionWithStatus(HttpStatus.BAD_REQUEST_400));
     }
 
     private Integer accountId(Request request) {
@@ -64,22 +67,32 @@ public class AccountsController {
         return String.valueOf(id);
     }
 
-    private String putMoney(Request request, Response response) {
+    /*
+        In case of network disconnect it's better to identify request when you send it.
+        For example the user can propose accountId to identify created account even if connection was broken and ok status missed.
+    */
+    private String account(Request request, Response response) {
         int id = accountId(request);
-        int amount = intQueryParam(request, "amount");
-        this.accountsService.putMoneyToAccount(id, amount);
-        return "Success";
+        int money = this.accountsService.moneyAtAccount(id);
+        return String.valueOf(money);
     }
 
     private Integer intQueryParam(Request request, String param) {
         return Integer.valueOf(request.queryParamOrDefault(param, "0"));
     }
 
+    private String putMoney(Request request, Response response) {
+        int id = accountId(request);
+        int amount = intQueryParam(request, "amount");
+        this.accountsService.putMoneyToAccount(id, amount);
+        return "Success.";
+    }
+
     private String takeMoney(Request request, Response response) {
         int id = accountId(request);
         int amount = intQueryParam(request, "amount");
         this.accountsService.takeMoneyFromAccount(id, amount);
-        return "Success";
+        return "Success.";
     }
 
     private String transferMoney(Request request, Response response) {
@@ -87,6 +100,6 @@ public class AccountsController {
         int toId = intQueryParam(request, "to");
         int amount = intQueryParam(request, "amount");
         this.accountsService.transferMoney(fromId, toId, amount);
-        return "Money transfered";
+        return "Money transferred.";
     }
 }

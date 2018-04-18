@@ -4,7 +4,7 @@ package com.mikhaylovich.application;
  * @author dmitry.mikhailovich@gmail.com
  */
 public class AccountNotFoundException extends RuntimeException {
-    AccountNotFoundException(int accountId) {
+    public AccountNotFoundException(int accountId) {
         super("Unable to find account with id " + accountId);
     }
 }

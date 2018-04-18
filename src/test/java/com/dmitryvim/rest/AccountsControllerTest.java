@@ -8,15 +8,17 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import java.io.IOException;
+import java.net.ServerSocket;
+
 import static org.junit.Assert.assertEquals;
 
 /**
- * @author dmitry.mikhaylovich@bostongene.com
+ * @author dmitry.mikhailovich@gmail.com
  */
 public class AccountsControllerTest {
 
-    //TODO use random port
-    private int port = 4567;
+    private int port = findAvailablePort();
 
     private AccountsService service;
 
@@ -48,5 +50,13 @@ public class AccountsControllerTest {
 
     private String url(String path) {
         return "http://localhost:" + this.port + "/" + path;
+    }
+
+    private static int findAvailablePort() {
+        try (ServerSocket socket = new ServerSocket(0)) {
+            return socket.getLocalPort();
+        } catch (IOException e) {
+            throw new RuntimeException("Some exception occurred on random port search.", e);
+        }
     }
 }

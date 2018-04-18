@@ -1,4 +1,4 @@
-package com.dmitryvim.account;
+package com.mikhaylovich.account;
 
 import org.junit.Test;
 

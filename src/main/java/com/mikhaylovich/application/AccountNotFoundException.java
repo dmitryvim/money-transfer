@@ -1,4 +1,4 @@
-package com.dmitryvim.application;
+package com.mikhaylovich.application;
 
 /**
  * @author dmitry.mikhailovich@gmail.com

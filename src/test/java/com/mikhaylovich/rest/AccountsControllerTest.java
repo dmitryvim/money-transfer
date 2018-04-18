@@ -1,8 +1,8 @@
-package com.dmitryvim.rest;
+package com.mikhaylovich.rest;
 
-import com.dmitryvim.application.AccountsService;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
+import com.mikhaylovich.application.AccountsService;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;

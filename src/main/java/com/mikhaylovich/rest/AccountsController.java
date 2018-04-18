@@ -1,7 +1,7 @@
-package com.dmitryvim.rest;
+package com.mikhaylovich.rest;
 
 
-import com.dmitryvim.application.AccountsService;
+import com.mikhaylovich.application.AccountsService;
 import spark.Request;
 import spark.Response;
 
@@ -19,6 +19,7 @@ public class AccountsController {
     }
 
     public void startServer(int port) {
+        //TODO catch exceptions
         port(port);
         post("/accounts", this::createAccount);
         post("/accounts/:id/put-money", this::putMoney);

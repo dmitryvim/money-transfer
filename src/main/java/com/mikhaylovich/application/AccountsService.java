@@ -1,6 +1,6 @@
-package com.dmitryvim.application;
+package com.mikhaylovich.application;
 
-import com.dmitryvim.account.Account;
+import com.mikhaylovich.account.Account;
 
 import java.util.ArrayList;
 import java.util.List;

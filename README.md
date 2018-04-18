@@ -12,3 +12,36 @@ Design and implement a RESTful API (including data model and the backing impleme
 
 1. the code produced by you is expected to be of high quality. 
 2. there are no detailed requirements, use common sense.
+
+# Build and run
+
+## Configure
+
+To keep app simple, we haven't implemented any configuration file.
+So, to configure server port use `com.mikhaylovich.MoneyTransferApplication` and change line 
+```java
+accountsController.startServer(8080);
+```
+
+## Build
+
+Build jar with gradle or use bash command
+```bash
+./gradlew build
+``` 
+
+This way you'll run all tests and get jar at `build/libs/money-transfer.jar`
+
+## Run
+
+Run app with java
+```bash
+java -jar build/libs/money-transfer.jar
+```
+
+And test it with curl
+```bash
+curl -X POST http://localhost:8081/accounts
+curl -X GET http://localhost:8081/accounts/0
+```
+
